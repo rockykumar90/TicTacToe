@@ -4,7 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1024, initial-scale=1.0">
     <title>TIcTacToe Game</title>
-    <link rel="stylesheet" href="tuctac.css">
+<!--     <link rel="stylesheet" href="tuctac.css"> -->
+    <style>*{
+    margin: 0;
+    padding: 0%;
+}
+body{
+    text-align: center;
+  
+    background-color: bisque;
+}
+.container{
+    height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.game{
+    height: 60vmin;
+    width: 60vmin;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    gap: 1.5vmin;
+    flex-wrap: wrap;
+}
+
+.box{
+    height: 18vmin;
+    width: 18vmin;
+    border-radius:1rem;
+    background-color: rgb(97, 97, 243);
+    border: none;
+    font-size: 8vmin;
+    box-shadow: 0 0 1rem pink;
+    color: brown;
+    text-size-adjust: large;
+
+}
+ .newgame{
+    height: 35px;
+    width: 120px;
+    border-radius: 1rem;
+   background-color: black;
+    color: azure;  
+   font-weight: bold;
+    }
+
+    p{
+        font-size: xx-large;
+        font-weight: bolder;
+    }
+
+    .msgcont{
+        height: 1000px;
+    }
+
+    .abc{
+        height: 250px;
+    }
+.hide{
+    display: none;
+}</style>
 </head>
 <body>
     <h1>*Tic Tac Toe*</h1>
@@ -28,6 +90,64 @@
             </div>
         </div>
     </main>
-    <script src="tictac.js"></script>
+    <script> 
+ let allbox= document.querySelectorAll(".box");
+ let turno=true;
+
+ allbox.forEach((box) => {
+    box.addEventListener("click", ()=> {
+         if(turno){turno=false; box.innerText="O";}
+    else{turno=true; box.innerText="X"}
+    box.disabled=true;
+    checkWinner();
+    });
+   
+    
+ });
+
+ const winPatterns = [
+  [0, 1, 2],
+  [0, 3, 6],
+  [0, 4, 8],
+  [1, 4, 7],
+  [2, 5, 8],
+  [2, 4, 6],
+  [3, 4, 5],
+  [6, 7, 8],
+];
+
+ const checkWinner= ()=>{
+    for(let pattern of winPatterns ){
+        let pos1val = allbox[pattern[0]].innerText;
+        let pos2val = allbox[pattern[1]].innerText;
+        let pos3val = allbox[pattern[2]].innerText;
+        if(pos1val != "" && pos2val != "" && pos3val != ""){
+            if(pos1val===pos2val && pos2val===pos3val){
+                showWinner(pos1val);
+               
+
+            }
+        }
+    }
+ };
+
+ 
+ let msg = document.querySelector("p");
+ let nwbtn = document.querySelector("newgame") ;
+ let msgcont = document.querySelector(".msgcont");
+ 
+msgcont.addEventListener("click", ()=>{
+    msgcont.classList.add("hide");
+   
+});
+
+ const showWinner = (winner) => {
+msg.innerText=`Winner is ${winner}`;
+msgcont.classList.remove("hide");
+
+
+
+
+ }</script>  
 </body>
 </html>
