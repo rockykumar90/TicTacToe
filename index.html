@@ -90,64 +90,95 @@ body{
             </div>
         </div>
     </main>
-    <script> 
- let allbox= document.querySelectorAll(".box");
- let turno=true;
+<script>let allbox = document.querySelectorAll(".box");
+let turno = true;
+let gameActive = true;
 
- allbox.forEach((box) => {
-    box.addEventListener("click", ()=> {
-         if(turno){turno=false; box.innerText="O";}
-    else{turno=true; box.innerText="X"}
-    box.disabled=true;
-    checkWinner();
+// गेम रीसेट फंक्शन
+const resetGame = () => {
+    allbox.forEach((box) => {
+        box.innerText = "";
+        box.disabled = false;
     });
-   
-    
- });
+    turno = true;
+    gameActive = true;
+    msg.innerText = "";
+    msgcont.classList.add("hide");
+};
 
- const winPatterns = [
-  [0, 1, 2],
-  [0, 3, 6],
-  [0, 4, 8],
-  [1, 4, 7],
-  [2, 5, 8],
-  [2, 4, 6],
-  [3, 4, 5],
-  [6, 7, 8],
+// बॉक्स क्लिक हैंडलर
+allbox.forEach((box) => {
+    box.addEventListener("click", () => {
+        if (!gameActive) return;
+        
+        if (turno) {
+            box.innerText = "O";
+            turno = false;
+        } else {
+            box.innerText = "X";
+            turno = true;
+        }
+        box.disabled = true;
+        checkWinner();
+    });
+});
+
+const winPatterns = [
+    [0, 1, 2],
+    [0, 3, 6],
+    [0, 4, 8],
+    [1, 4, 7],
+    [2, 5, 8],
+    [2, 4, 6],
+    [3, 4, 5],
+    [6, 7, 8],
 ];
 
- const checkWinner= ()=>{
-    for(let pattern of winPatterns ){
+const checkWinner = () => {
+    for (let pattern of winPatterns) {
         let pos1val = allbox[pattern[0]].innerText;
         let pos2val = allbox[pattern[1]].innerText;
         let pos3val = allbox[pattern[2]].innerText;
-        if(pos1val != "" && pos2val != "" && pos3val != ""){
-            if(pos1val===pos2val && pos2val===pos3val){
+        
+        if (pos1val != "" && pos2val != "" && pos3val != "") {
+            if (pos1val === pos2val && pos2val === pos3val) {
+                gameActive = false;
                 showWinner(pos1val);
-               
-
+                return;
             }
         }
     }
- };
+    
+    // ड्रॉ की स्थिति चेक करें
+    let isDraw = true;
+    allbox.forEach((box) => {
+        if (box.innerText === "") {
+            isDraw = false;
+        }
+    });
+    
+    if (isDraw) {
+        gameActive = false;
+        showDraw();
+    }
+};
 
- 
- let msg = document.querySelector("p");
- let nwbtn = document.querySelector("newgame") ;
- let msgcont = document.querySelector(".msgcont");
- 
-msgcont.addEventListener("click", ()=>{
-    msgcont.classList.add("hide");
-   
-});
+let msg = document.querySelector("p");
+let nwbtn = document.querySelector(".newgame");
+let msgcont = document.querySelector(".msgcont");
 
- const showWinner = (winner) => {
-msg.innerText=`Winner is ${winner}`;
-msgcont.classList.remove("hide");
+// नई गेम बटन पर क्लिक हैंडलर
+nwbtn.addEventListener("click", resetGame);
 
+const showWinner = (winner) => {
+    msg.innerText = `Winner is ${winner}!`;
+    msgcont.classList.remove("hide");
+};
 
-
-
- }</script>  
+const showDraw = () => {
+    msg.innerText = "Game Draw!";
+    msgcont.classList.remove("hide");
+};
+ </script>
 </body>
 </html>
